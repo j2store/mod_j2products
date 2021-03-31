@@ -1,0 +1,15 @@
+.j2store-module-product .product-qty input{
+	width:40%;
+}
+
+.j2store-module-product .j2store-add-to-cart {
+
+}
+
+.j2store-module-product .product-qty{
+	display: inline-block;
+}
+
+.j2store-module-product .j2store-cart-button{
+	display: inline-block;
+}

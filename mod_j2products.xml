@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.0" client="site" method="upgrade">
+	<name>mod_j2products</name>
+	<author>J2Store</author>
+	<creationDate>JUN 2020</creationDate>
+	<copyright>Copyright (C) 2020 J2Store.org. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>support@j2store.org</authorEmail>
+	<authorUrl>https://www.j2store.org</authorUrl>
+	<version>1.33</version>
+	<description>MOD_J2PRODUCTS_XML_DESCRIPTION</description>
+	<scriptfile>script.mod_j2products.php</scriptfile>
+	<files>
+		<filename module="mod_j2products">mod_j2products.php</filename>
+		<folder>elements</folder>
+		<folder>language</folder>
+		<folder>library</folder>
+		<folder>tmpl</folder>
+		<filename>helper.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_j2products.xml</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB.mod_j2products.ini</language>
+		<language tag="en-GB">language/en-GB.mod_j2products.sys.ini</language>
+	</languages>
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_J2STORE_PRODUCTS" />
+	<config>
+        <fields name="params">
+            <fieldset name="basic" addfieldpath="/modules/mod_j2products/elements/">
+				<field name="module_subtemplate" type="subtemplate" modulename="mod_j2products" label="MOD_J2PRODUCTS_SUBTEMPLATE" description="MOD_J2PRODUCTS_SUBTEMPLATE_DESC" />
+				<field name="menu_id" type="J2storemenuitem" modulename="mod_j2products" label="MOD_J2PRODUCTS_MENU" description="MOD_J2PRODUCTS_MENU_DESC" />
+				<field name="content_integration" type="hidden" default="joomla" label="MOD_J2PRODUCTS_CONTENT_INTEGRATION" description="MOD_J2PRODUCTS_CONTENT_INTEGRATION_DESC" >
+					<option value="joomla">Joomla articles</option>
+					<option value="k2">K2</option>
+					<option value="zoo">Zoo</option>
+					<option value="seblod">Seblod</option>
+					<option value="sobipro">sobipro</option>
+					<option value="flexicontent">Flexi content</option>
+				</field>
+
+				<field name="sort_by" type="list" default="" label="MOD_J2PRODUCTS_SORT_BY" description="MOD_J2PRODUCTS_SORT_BY_DESC" >
+					<option value="">J2STORE_PRODUCT_SORT_BY</option>
+					<option value="asc">J2STORE_PRODUCT_SORT_ASCENDING</option>
+					<option value="desc">J2STORE_PRODUCT_SORT_DESCENDING</option>
+					<option value="min_price">J2STORE_PRODUCT_FILTER_SORT_PRICE_ASCENDING</option>
+					<option value="rmin_price">J2STORE_PRODUCT_FILTER_SORT_PRICE_DESCENDING</option>
+					<option value="sku">J2STORE_PRODUCT_FILTER_SORT_SKU_ASCENDING</option>
+					<option value="rsku">J2STORE_PRODUCT_FILTER_SORT_SKU_DESCENDING</option>
+					<option value="art_asc">J2STORE_PRODUCT_FILTER_SORT_ARTICLE_ASCENDING</option>
+					<option value="art_desc">J2STORE_PRODUCT_FILTER_SORT_ARTICLE_DESCENDING</option>
+					<option value="random">J2STORE_PRODUCT_RANDOM</option>
+				</field>
+
+				<field name="product_source_type" type="list" label="MOD_J2PRODUCTS_PRODUCT_SOURCE_TYPE" default="category"
+					description="MOD_J2PRODUCTS_PRODUCT_SOURCE_TYPE_DESC" >
+					<option value="category" onclick=" modj2prod_showSettings('source_category')" >MOD_J2PRODUCTS_PRODUCT_SOURCE_CATEGORIES</option>
+					<option value="product_tag">MOD_J2PRODUCTS_PRODUCT_TAG_BASED</option>
+					<option value="selected_products" onclick=" modj2prod_showSettings('source_selected_products')">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_PRODUCTS</option>
+					<option value="best_selling">MOD_J2PRODUCTS_PRODUCT_SOURCE_BEST_SELLING</option>
+				<!--	<option value="up_sells">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_UP_SELLS</option>
+					<option value="cross_sells">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_CROSS_SELLS</option>
+					<option value="related_products">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_RELATED_PRODUCTS</option>
+					<option value="related_buys">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_RELATED_BUYS</option> -->
+				</field>
+				<field name="product_tag_section" label="MOD_J2PRODUCTS_PRODUCT_TAG_SECTION" type="customheading" class="section" />
+				<!-- Product Tag -->
+				<field name="tag_list" type="taglist" multiple="multiple" label="MOD_J2PRODUCT_TAG_LIST" addfieldpath="/administrator/components/com_j2store/models/fields" />
+				<!-- Category -->
+				<field name="source_category" label="MOD_J2PRODUCTS_CATEGORY_SECTION" type="divstart" class="section" />
+				<field name="" label="MOD_J2PRODUCTS_CATEGORY_SECTION" type="customheading" class="source_category source" />
+				<field name="catids" type="category" extension="com_content"
+					multiple="true" size="5" class="source_category source" label="JCATEGORY" 
+					description="MOD_J2PRODUCTS_FIELD_CATEGORY_DESC" required="true">
+					<option value="*">JOPTION_ALL_CATEGORIES</option>
+				</field>
+				
+				<field name="include_subcategories" type="radio" default="1" class="btn-group source_aaa source" label="MOD_J2PRODUCTS_INCLUDE_SUBCATS" description="MOD_J2PRODUCTS_INCLUDE_SUBCATS_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				
+				<field name="include_subcat_level" type="list" default="0" class="source_category source" label="MOD_J2PRODUCTS_INCLUDE_SUBCAT_LEVEL" description="MOD_J2PRODUCTS_INCLUDE_SUBCAT_LEVEL_DESC">
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+				</field>
+
+				<!-- Select products-->
+				<field name="" label="MOD_J2PRODUCTS_PRODUCT_IDS_SECTION" type="customheading" class="source_selected_products source" />
+				<!--
+				<field name="product_ids" type="textarea" default="" class="source_selected_products source"
+						label="MOD_J2PRODUCTS_PRODUCT_IDS" description="MOD_J2PRODUCTS_PRODUCT_IDS_DESC" />
+						-->
+				<field name="" label="MOD_J2PRODUCTS_PRODUCT_IDS_NOTES" type="customnotice" class="source_selected_products source" addfieldpath="/administrator/components/com_j2store/models/fields"/>
+				<field   name="product_ids" type="couponproductadd" class="hideMe" label="J2STORE_COUPON_PRODUCTS" addfieldpath="/administrator/components/com_j2store/models/fields" />
+            </fieldset>
+
+            <fieldset name="layout"
+				label="MOD_J2PRODUCTS_FIELD_GROUP_LAYOUT_LABEL"
+				addfieldpath="/modules/mod_j2products/elements/" >
+				
+				<field name="number_of_coloums" type="number" default="3" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_DESC" />
+				<field name="number_of_coloums_Desktop" type="number" default="3" showon="module_subtemplate:Carousel" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_DESKTOP" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_DESKTOP_DESC" />
+				<field name="number_of_coloums_DesktopSmall" type="number" default="3" showon="module_subtemplate:Carousel" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_DESKTOP_SMALL" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_DESKTOP_SMALL_DESC" />
+				<field name="number_of_coloums_Tablet" type="number" default="3" showon="module_subtemplate:Carousel" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_TABLET" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_TABLET_DESC" />
+				<field name="number_of_coloums_TabletSmall" type="number" default="2" showon="module_subtemplate:Carousel" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_TABLET_SMALL" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_TABLET_SMAL_DESC" />
+				<field name="number_of_coloums_Mobile" type="number" default="1" showon="module_subtemplate:Carousel" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_MOBILE" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_COLOUMS_MOBILE_DESC" />
+				<!--
+				<field name="show_pagination" label="MOD_J2STORE_PRODUCTS_FIELD_SHOW_SLIDER_PAGINATION_LABEL" showon="module_subtemplate:Carousel"
+					   description="MOD_J2STORE_PRODUCTS_FIELD_SHOW_SLIDER_PAGINATION_LABEL_DESC" type="radio" default="0"
+					   class="btn-group">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				-->
+				<field name="show_navigation" label="MOD_J2STORE_PRODUCTS_FIELD_SHOW_SLIDER_NAVIGATION_LABEL" showon="module_subtemplate:Carousel"
+					   description="MOD_J2STORE_PRODUCTS_FIELD_SHOW_SLIDER_NAVIGATION_LABEL_DESC" type="radio" default="0"
+					   class="btn-group">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				<!--
+				<field name="force_single_column" type="radio" default="0" showon="module_subtemplate:Carousel" class="btn-group" 
+					label="MOD_J2PRODUCTS_FIELD_FORCE_SINGLE_COLUMN" description="MOD_J2PRODUCTS_FIELD_FORCE_SINGLE_COLUMN_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				-->
+				<field name="number_of_items" type="number" default="6" label="MOD_J2PRODUCTS_FIELD_NUMBER_OF_ITEMS" description="MOD_J2PRODUCTS_FIELD_NUMBER_OF_ITEMS_DESC"/>
+
+				<field name="show_feature_only" type="radio" default="0" class="btn-group"
+					   label="J2STORE_PRODUCT_SHOW_FEATURE_LABEL" >
+					<option value="0">J2STORE_ALL</option>
+					<option value="1">J2STORE_SHOW_FEATURE_ONLY</option>
+				</field>
+
+				<field name="show_title" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_TITLE_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_TITLE_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="link_title" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_LINKTITLES_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_LINKTITLES_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+
+				<field name="show_sku" type="radio" default="0" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_SHOW_SKU" description="MOD_J2STORE_PRODUCT_SHOW_SKU_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<!-- Cart and price section -->
+				<field name="" label="MOD_J2PRODUCTS_CART_LAYOUT_SECTION" type="customheading"/>
+				<field name="show_price" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_PRICE" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_PRICE_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				
+				<field name="show_price_taxinfo" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_PRICE_TAXINFO" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_PRICE_TAXINFO_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				
+				<field name="show_special_price" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_SPECIAL_PRICE" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_SPECIAL_PRICE_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				
+				<field name="show_offers" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_OFFERS" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_OFFERS_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				
+				<field name="show_stock" type="radio" default="0" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_STOCK" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_STOCK_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="show_beforedisplaycontent" type="radio" default="1" class="btn-group"
+					   label="MOD_J2STORE_PRODUCT_FIELD_SHOW_BEFOREDISPLAYCONTENT" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_BEFOREDISPLAYCONTENT_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="show_afterdisplaycontent" type="radio" default="1" class="btn-group"
+					   label="MOD_J2STORE_PRODUCT_FIELD_SHOW_AFTERDISPLAYCONTENT" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_AFTERDISPLAYCONTENT_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				<field name="list_show_cart" type="list" default="2"
+					   label="MOD_J2STORE_PRODUCT_ADD_TO_CART" description="MOD_J2STORE_PRODUCT_ADD_TO_CART_DESC">
+					<option value="1">J2STORE_SHOW_CART_WITH_OPTIONS</option>
+					<option value="2">J2STORE_DO_NOT_SHOW_OPTIONS</option>
+					<option value="3">J2STORE_ALWAYS_TAKE_TO_DETAIL_PAGE</option>
+
+				</field>
+				<!--<field name="show_options" type="radio" default="0" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_OPTIONS" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_OPTIONS_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="show_cart" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCT_FIELD_SHOW_CART" description="MOD_J2STORE_PRODUCT_FIELD_SHOW_CART_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+				-->
+				<field name="show_introtext" type="radio" default="0" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_SHOWINTROTEXT_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_SHOWINTROTEXT_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="introtext_limit" type="text" default="50"
+					label="MOD_J2STORE_PRODUCTS_FIELD_INTROTEXTLIMIT_LABEL"
+					description="MOD_J2STORE_PRODUCTS_FIELD_INTROTEXTLIMIT_DESC" />
+
+				<!-- <field name="show_readmore" label="JGLOBAL_SHOW_READMORE_LABEL"
+					description="JGLOBAL_SHOW_READMORE_DESC" type="radio" default="0"
+					class="btn-group">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field> -->
+
+				<field name="show_quickview" label="MOD_J2STORE_PRODUCTS_FIELD_SHOW_QUICKVIEW"
+					description="MOD_J2STORE_PRODUCTS_FIELD_SHOW_QUICKVIEW_DESC" type="radio" default="0"
+					class="btn-group">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<!-- Image section -->
+				<field name="" label="MOD_J2PRODUCTS_IMAGE_LAYOUT_SECTION" type="customheading"/>
+				<field name="show_image" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_DESC">
+					<option value="1">JSHOW</option>
+					<option value="0">JHIDE</option>
+				</field>
+
+				<field name="link_image" type="radio" default="1" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_LINK_IMAGE_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_LINK_IMAGE_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				
+				<field name="image_type" type="list" default="thumbimage"
+					label="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_TYPE_LABEL" description="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_TYPE_DESC">
+					<option value="thumbimage">MOD_J2PRODUCT_IMAGE_THUMBNAIL</option>
+					<option value="mainimage">MOD_J2PRODUCT_IMAGE_MAINIMAGE</option>
+				</field>
+
+				<field name="image_size_width" type="text" default="80"
+					label="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_WIDTH_LABEL"
+					description="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_WIDTH_DESC" />
+
+				<field name="image_size_height" type="text" default="80"
+					label="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_HEIGHT_LABEL"
+					description="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_HEIGHT_DESC" />
+
+				<field name="image_position" type="radio" default="top" class="btn-group"
+					label="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_POSITION_LABEL"
+					description="MOD_J2STORE_PRODUCTS_FIELD_IMAGE_SIZE_POSITION_DESC">
+					<option value="left">MOD_J2STORE_PRODUCTS_IMAGE_POSITION_LEFT</option>
+					<option value="top">MOD_J2STORE_PRODUCTS_IMAGE_POSITION_TOP</option>
+					<option value="right">MOD_J2STORE_PRODUCTS_IMAGE_POSITION_RIGHT</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">  
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />  
+             </fieldset>
+        </fields>
+    </config>
+</extension>
