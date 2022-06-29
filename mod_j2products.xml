@@ -2,12 +2,12 @@
 <extension type="module" version="3.0" client="site" method="upgrade">
 	<name>mod_j2products</name>
 	<author>J2Store</author>
-	<creationDate>JUN 2020</creationDate>
+	<creationDate>JUN 2022</creationDate>
 	<copyright>Copyright (C) 2020 J2Store.org. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
 	<authorEmail>support@j2store.org</authorEmail>
 	<authorUrl>https://www.j2store.org</authorUrl>
-	<version>1.33</version>
+	<version>1.34</version>
 	<description>MOD_J2PRODUCTS_XML_DESCRIPTION</description>
 	<scriptfile>script.mod_j2products.php</scriptfile>
 	<files>
