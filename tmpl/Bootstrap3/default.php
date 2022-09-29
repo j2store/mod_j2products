@@ -7,9 +7,18 @@
 defined('_JEXEC') or die;
 $total_cols = $params->get('number_of_coloums', 3);
 $total_cols = ((int)$total_cols == 0) ? 1 : $total_cols;
-$total_count = count($list); $counter = 0;
+$total_count = count($list);
+$counter = 0;
+$platform = J2Store::platform();
+$app = $platform->application();
+$document = $app->getDocument();
+$document->addScript(JURI::root(true).'/media/j2store/js/filter.js');
+$url_params = array();
+$item_id = '';
+$active_link = $platform->getProductUrl($url_params);
+$actionURL = $active_link;
 ?>
-<div itemscope itemtype="https://schema.org/ItemList" class="j2store-product-module j2store-product-module-list row">
+<div  class="j2store-product-module j2store-product-module-list row">
     <?php if( count($list) > 0 ):?>
         <?php foreach ($list as $product_id => $product) : ?>
             <?php  $rowcount = ((int) $counter % (int) $total_cols) + 1; ?>
@@ -19,9 +28,9 @@ $total_count = count($list); $counter = 0;
                 <?php $row = $counter / $total_cols; ?>
                 <div class="j2store-module-product-row <?php echo 'row-'.$row; ?> row">
             <?php endif;?>
-            <div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"  class="col-sm-<?php echo round((12 / $total_cols));?>">
-                <meta itemprop="position" content="<?php echo $counter+1;?>" />
-                <div itemprop="item" itemscope="" itemtype="http://schema.org/Product" class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product">
+            <div   class="col-sm-<?php echo round((12 / $total_cols));?>">
+                <meta content="<?php echo $counter+1;?>" />
+                <div  class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product">
 
                     <!-- product image if postion is top -->
                     <?php if ($product->image_position == 'top') {
@@ -29,29 +38,23 @@ $total_count = count($list); $counter = 0;
                     } ?>
 
                     <!-- product title -->
-                    <?php if($product->show_title):
-                        $uri = JFactory::getURI();
-                        $current_page_url = $uri->toString();
-                        ?>
-                        <h4 itemprop="name" class="product-title">
-                            <?php if( $product->link_title ): ?>
-                            <a itemprop="url"
-                               href="<?php echo $product->module_display_link; ?>"
-                               title="<?php echo $product->product_name; ?>" >
-                                <?php endif; ?>
+                    <h2 class="product-title col-sm-12" >
+                        <?php if($product->show_title): ?>
+                        <a href="<?php echo $product->module_display_link; ?>"
+                           title="<?php echo $product->product_name ; ?>" >
+                            <?php endif; ?>
 
-                                <?php echo $product->product_name; ?>
-                                <?php if($product->link_title ): ?>
-                            </a>
-                        <?php endif; ?>
-                        </h4>
+                            <?php echo $product->product_name; ?>
+                            <?php if($product->link_title): ?>
+                        </a>
                     <?php endif; ?>
+                    </h2>
                     <?php if(isset($product->event->afterDisplayTitle)) : ?>
                         <?php echo $product->event->afterDisplayTitle; ?>
                     <?php endif;?>
                     <!-- end product title -->
 
-                    <div class="product-cart-section col-sm-12 ">
+                    <div class="product-cart-section">
                         <?php
                         if($product->image_position == 'top'){
                             $img_class = ' col-sm-12 ';
@@ -66,7 +69,7 @@ $total_count = count($list); $counter = 0;
                         <div class="product-cart-left-block <?php echo $img_class; ?>" >
                             <!-- Product price block-->
                             <?php echo J2Store::plugin()->eventWithHtml('BeforeRenderingProductPrice', array($product)); ?>
-                            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="product-price-container">
+                            <div  class="product-price-container">
                                 <?php if($product->show_price && $product->show_special_price):?>
                                     <?php if($product->pricing->base_price != $product->pricing->price):?>
                                         <?php $class='';?>
@@ -104,9 +107,9 @@ $total_count = count($list); $counter = 0;
                                         <?php echo J2Store::product()->get_tax_text(); ?>
                                     </div>
                                 <?php endif; ?>
-                                <meta itemprop="price" content="<?php echo $product->pricing->price; ?>" />
-                                <meta itemprop="priceCurrency" content="<?php echo $j2currency->getCode(); ?>" />
-                                <link itemprop="availability" href="https://schema.org/<?php echo $product->variant->availability ? 'InStock':'OutOfStock'; ?>" />
+                                <meta  content="<?php echo $product->pricing->price; ?>" />
+                                <meta  content="<?php echo $j2currency->getCode(); ?>" />
+                                <link  href="<?php echo $product->variant->availability ? 'InStock':'OutOfStock'; ?>" />
                             </div>
                             <?php echo J2Store::plugin()->eventWithHtml('AfterRenderingProductPrice', array($product)); ?>
 
@@ -125,7 +128,7 @@ $total_count = count($list); $counter = 0;
                                 <?php if(!empty($product->variant->sku)) : ?>
                                     <div class="product-sku">
                                         <span class="sku-text"><?php echo JText::_('J2STORE_SKU')?></span>
-                                        <span itemprop="sku" class="sku"> <?php echo $product->variant->sku; ?> </span>
+                                        <span   class="sku"> <?php echo $product->variant->sku; ?> </span>
                                     </div>
                                 <?php endif; ?>
                             <?php endif; ?>
@@ -176,6 +179,7 @@ $total_count = count($list); $counter = 0;
                                         if ($product->product_type=='subscriptionproduct' || $product->product_type=='variablesubscriptionproduct') {
                                             $cart_type = 1	;
                                         }
+                                        $product_option = isset($product->options) && is_array($product->options) ? count($product->options) : 0 ;
                                         if($cart_type == 1) : ?>
                                             <?php if ( $product->product_type=='simple' || $product->product_type=='downloadable' ):
                                                 require( __DIR__.'/default_options.php' );
@@ -189,12 +193,12 @@ $total_count = count($list); $counter = 0;
                                                 require( __DIR__.'/default_variablesubscriptionproductoptions.php' );
                                             endif;
                                             ?>
-                                        <?php elseif( $product->product_type=='configurable' || ($cart_type == 2 && count($product->options)) || $cart_type==3 ):?>
+                                        <?php elseif( $product->product_type=='configurable' || ($cart_type == 2 && $product_option) || $cart_type==3 ):?>
                                             <!-- we have options so we just redirect -->
                                             <a href="<?php echo $product->module_display_link; ?>" class="j2store-button-cart <?php echo $params->get('choosebtn_class', 'btn btn-success'); ?>"><?php echo JText::_('J2STORE_VIEW_PRODUCT_DETAILS'); ?></a>
                                             <?php $product->display_cart_block = false; ?>
                                         <?php endif; ?>
-
+                                        <?php $show = J2Store::product ()->validateVariableProduct($product); ?>
                                         <?php echo J2Store::plugin()->eventWithHtml('BeforeAddToCartButton', array($product, J2Store::utilities()->getContext('default_cart'))); ?>
 
                                         <?php if ($product->display_cart_block): ?>

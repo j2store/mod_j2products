@@ -23,7 +23,8 @@ class JFormFieldJ2StoreMenuItem extends JFormField
 	 */
 	protected function getInput()
 	{
-		$app = JFactory::getApplication();
+        $platform = J2Store::platform();
+		$app = $platform->application();
 		$options = array();
 		$module_id = $app->input->getInt('id');
 		$menus =JMenu::getInstance('site');
