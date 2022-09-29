@@ -63,15 +63,15 @@
 					<option value="related_products">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_RELATED_PRODUCTS</option>
 					<option value="related_buys">MOD_J2PRODUCTS_PRODUCT_SOURCE_SELECTED_RELATED_BUYS</option> -->
 				</field>
-				<field name="product_tag_section" label="MOD_J2PRODUCTS_PRODUCT_TAG_SECTION" type="customheading" class="section" />
+				<field name="product_tag_section"  label="MOD_J2PRODUCTS_PRODUCT_TAG_SECTION" type="customheading" class="section"  />
 				<!-- Product Tag -->
-				<field name="tag_list" type="taglist" multiple="multiple" label="MOD_J2PRODUCT_TAG_LIST" addfieldpath="/administrator/components/com_j2store/models/fields" />
+				<field name="tag_list" type="taglist" multiple="true"   layout="joomla.form.field.list-fancy-select"  label="MOD_J2PRODUCT_TAG_LIST" addfieldpath="/administrator/components/com_j2store/models/fields"/>
 				<!-- Category -->
 				<field name="source_category" label="MOD_J2PRODUCTS_CATEGORY_SECTION" type="divstart" class="section" />
 				<field name="" label="MOD_J2PRODUCTS_CATEGORY_SECTION" type="customheading" class="source_category source" />
 				<field name="catids" type="category" extension="com_content"
 					multiple="true" size="5" class="source_category source" label="JCATEGORY" 
-					description="MOD_J2PRODUCTS_FIELD_CATEGORY_DESC" required="true">
+					description="MOD_J2PRODUCTS_FIELD_CATEGORY_DESC" required="true" layout="joomla.form.field.list-fancy-select">
 					<option value="*">JOPTION_ALL_CATEGORIES</option>
 				</field>
 				

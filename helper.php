@@ -10,12 +10,16 @@ jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 
 $com_path = JPATH_SITE.'/components/com_content/';
+
 if (!class_exists('ContentHelperRoute')) {
     require_once $com_path.'helpers/route.php';
 }
 if (!class_exists('ContentRouter')) {
-    include $com_path.'router.php';
+    if (version_compare(JVERSION, '3.99.99', 'lt')) {
+        include $com_path . 'router.php';
+    }
 }
+
 
 /**
  * Helper for mod_j2products
@@ -77,6 +81,7 @@ class ModJ2ProductsHelper
         if (!empty($product_ids)) {
             // pre-process the items or result array
             $list  = $obj->prepareProducts($params, $product_ids);
+
         }
         return $list;
     }
@@ -120,8 +125,8 @@ class ModJ2ProductsHelper
                     //default to the sql formatted date
                     $nowDate = $db->quote( $date->toSql());
 
-                    $query->where('(content.publish_up = '.$nullDate.' OR content.publish_up <= '.$nowDate.')')
-                        ->where('(content.publish_down = '.$nullDate.' OR content.publish_down >= '.$nowDate.')');
+                    $query->where('(content.publish_up = '.$nullDate.' OR content.publish_up <= '.$nowDate.' OR content.publish_up IS NULL)')
+                        ->where('(content.publish_down = '.$nullDate.' OR content.publish_down >= '.$nowDate.' OR content.publish_down IS NULL)');
 
                     $user = JFactory::getUser();
                     //access
@@ -130,17 +135,21 @@ class ModJ2ProductsHelper
                     $this->_tagBuildSortQuery($query,$params);
                     $db->setQuery($query,0,$limit);
                     $list = $db->loadObjectList();
+
                     foreach ($list as $product){
                         $product_ids[] = $product->j2store_product_id;
+
                     }
                 }
                 break;
             case 'category': // get the product ids from the categories selected in module params
+
                 $product_ids = array();
                 $integration = $params->get('content_integration','joomla');
                 // check if file exists and class exists and include the product source file
                 $class_path = JPATH_SITE.'/modules/mod_j2products/library/source/'.$integration.'.php' ;
                 $product_source_class = 'ProductSource'.ucfirst($integration);
+
                 if (file_exists($class_path) ) {
                     require_once JPATH_SITE.'/modules/mod_j2products/library/source/'.$integration.'.php';
                 }elseif(!class_exists($product_source_class)) {
@@ -172,8 +181,8 @@ class ModJ2ProductsHelper
                     //default to the sql formatted date
                     $nowDate = $db->quote( $date->toSql());
 
-                    $query->where('(content.publish_up = '.$nullDate.' OR content.publish_up <= '.$nowDate.')')
-                        ->where('(content.publish_down = '.$nullDate.' OR content.publish_down >= '.$nowDate.')');
+                    $query->where('(content.publish_up = '.$nullDate.' OR content.publish_up <= '.$nowDate.' OR content.publish_up IS NULL)')
+                        ->where('(content.publish_down = '.$nullDate.' OR content.publish_down >= '.$nowDate.' OR content.publish_down IS NULL)');
 
                     $user = JFactory::getUser();
                     //access
@@ -187,8 +196,10 @@ class ModJ2ProductsHelper
                     $product_ids = explode(',', $params_product_ids);
                 }*/
                 // remove duplicates
-                $product_ids = array_unique($product_ids);
-                $product_ids = array_slice($product_ids, 0, $limit+1);
+                if(!empty($product_ids) && is_array($product_ids)){
+                    $product_ids = array_unique($product_ids);
+                    $product_ids = array_slice($product_ids, 0, $limit+1);
+                }
                 break;
             case 'best_selling': // get the product ids of best selling products
                 $db = JFactory::getDBO();
@@ -334,6 +345,7 @@ class ModJ2ProductsHelper
      * */
     function prepareProducts($params,$product_ids){
         //static $sets=array();
+
         $sets=array();
         // prapare a hash of product ids and load in static set
         $product_ids_src = $product_ids ;
@@ -357,7 +369,8 @@ class ModJ2ProductsHelper
             $product_source_obj = new $product_source_class();
         }
         $list = array();
-        $dispatcher = JDispatcher::getInstance();
+        JPluginHelper::importPlugin('j2store');
+        $dispatcher = J2Store::platform()->application();
         JPluginHelper::importPlugin('content');
         foreach ($product_ids as $k => $pid) {
             // prepare the product
@@ -377,9 +390,7 @@ class ModJ2ProductsHelper
                         }
                     }*/
 
-
-
-                    $results = $dispatcher->trigger('onContentBeforeDisplay', array('com_content.category.productlist', &$product->source, &$params));
+                    $results = $dispatcher->triggerEvent('onContentBeforeDisplay', array('com_content.category.productlist', &$product->source, &$params));
                     $beforedisplay = '';
                     if(!empty( $results )){
                         $beforedisplay = trim(implode("\n", $results));
@@ -387,7 +398,7 @@ class ModJ2ProductsHelper
                     $product->event = new stdClass();
                     $product->event->beforeDisplayContent = $beforedisplay;
                     $afterdisplay = '';
-                    $result = $dispatcher->trigger('onContentAfterDisplay', array('com_content.category.productlist', &$product->source, &$params));
+                    $result = $dispatcher->triggerEvent('onContentAfterDisplay', array('com_content.category.productlist', &$product->source, &$params));
                     if(!empty( $result )){
                         $afterdisplay = trim(implode("\n", $result));
                     }
@@ -416,6 +427,7 @@ class ModJ2ProductsHelper
                 $product->show_readmore		= $params->get('show_readmore',1);
                 $product->show_quickview	= $params->get('show_quickview',0);
 
+                //echo "<pre>";print_r($product->show_quickview);exit;
                 if($product->show_quickview){
                     $document = JFactory::getDocument();
                     $document->addStyleSheet(rtrim(JURI::root(true),'/').'/modules/mod_j2products/library/assets/jquery.fancybox.min.css');
@@ -444,11 +456,15 @@ class ModJ2ProductsHelper
                     $product_source_obj->prepareProduct( $params, $product);
                 }
                 $menu_id = $params->get('menu_id','');
+
                 $itemid = '';
                 if($menu_id){
                     $itemid = '&Itemid='.$menu_id;
                 }
-                $product->module_display_link = JRoute::_('index.php?option=com_j2store&view=products&task=view&id='.$product->j2store_product_id.$itemid);//$product->product_link;
+                $platform = J2Store::platform();
+
+                $product->module_display_link = $platform->getProductUrl(array('task' => 'view','id' => $product->j2store_product_id.$itemid ),false);
+                //$product->module_display_link = JRoute::_('index.php?option=com_j2store&view=products&task=view&id='.$product->j2store_product_id.$itemid);//$product->product_link;
                 $product_tag_link = $params->get('product_source_type','category');
                 if($product_tag_link == 'product_tag'){
                     $app = JFactory::getApplication();
@@ -480,7 +496,8 @@ class ModJ2ProductsHelper
                     if($ex_menu_id > 0){
                         $itemid = '&Itemid='.$ex_menu_id;
                     }
-                    $product->module_display_link = JRoute::_('index.php?option=com_j2store&view=producttags&task=view&id='.$product->j2store_product_id.$itemid);//$product->product_link;
+                    $product->module_display_link = $platform->getProductUrl(array('task' => 'view','id' => $product->j2store_product_id.$itemid ),false);
+                  //  $product->module_display_link = JRoute::_('index.php?option=com_j2store&view=producttags&task=view&id='.$product->j2store_product_id.$itemid);//$product->product_link;
                 }
                 $product->module_introtext = self::truncate($product->product_short_desc, $product->introtext_limit); // truncated intro text
                 if(!empty($product->addtocart_text)) {
@@ -505,6 +522,7 @@ class ModJ2ProductsHelper
             }
             $prod_table->reset();
         }
+        //exit;
         $sets[$hash] = $list ;
         return $sets[$hash];
     }

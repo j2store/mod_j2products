@@ -11,10 +11,13 @@ require_once (JPATH_ADMINISTRATOR.'/components/com_j2store/helpers/j2store.php')
 require_once (JPATH_SITE.'/modules/mod_j2products/helper.php');
 require_once (JPATH_ADMINISTRATOR.'/components/com_j2store/helpers/strapper.php');
 J2StoreStrapper::addJS();
-JFactory::getLanguage ()->load ('com_j2store', JPATH_ADMINISTRATOR);
-$document =JFactory::getDocument();
+$platform = J2Store::platform();
+$app = $platform->application();
+$app->getLanguage()->load ('com_j2store', JPATH_ADMINISTRATOR);
+$document = JFactory::getDocument ();
 //$document->addScript(JURI::root(true).'/media/j2store/js/j2store.js');
 $document->addStyleSheet(JURI::root(true).'/media/j2store/css/j2store.css');
+
 $subTemplate = $params->get('module_subtemplate', 'Default');
 
 // add additional CSS and JS files associated with the layout
@@ -33,4 +36,5 @@ $J2gridCol = ($j2params->get('bootstrap_version', 2) == 2) ? 'span' : 'col-md-';
 $list = ModJ2ProductsHelper::getList($params);
 $moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'));
 $module_id = $module->id;  // module id
+
 require JModuleHelper::getLayoutPath('mod_j2products', $subTemplate.'/default');

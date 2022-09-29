@@ -9,7 +9,7 @@ $total_cols = $params->get('number_of_coloums', 3);
 $total_cols = ((int)$total_cols == 0) ? 1 : $total_cols;
 $total_count = count($list); $counter = 0;
 ?>
-<div itemscope itemtype="https://schema.org/ItemList" class="j2store-product-module j2store-product-module-list">
+<div class="j2store-product-module j2store-product-module-list">
 	<?php if( count($list) > 0 ):?>
 		<?php foreach ($list as $product_id => $product) : ?>
 			<?php  $rowcount = ((int) $counter % (int) $total_cols) + 1; ?>
@@ -20,9 +20,9 @@ $total_count = count($list); $counter = 0;
 				<?php $row = $counter / $total_cols; ?>
 				<div class="j2store-module-product-row <?php echo 'row-'.$row; ?> row-fluid">
 			<?php endif;?>
-			<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="span<?php echo round((12 / $total_cols));?>">
-                <meta itemprop="position" content="<?php echo $counter+1;?>" />
-				<div itemprop="item" itemscope="" itemtype="http://schema.org/Product" class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product">
+			<div  class="span<?php echo round((12 / $total_cols));?>">
+                <meta content="<?php echo $counter+1;?>" />
+				<div  class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product">
 					<!-- product image if postion is top -->
 					<?php if ($product->image_position == 'top') {
 						require( __DIR__.'/default_image.php' );
@@ -65,7 +65,7 @@ $total_count = count($list); $counter = 0;
 						<div class="product-cart-left-block <?php echo $img_class; ?>" >
 							<!-- Product price block-->
 							<?php echo J2Store::plugin()->eventWithHtml('BeforeRenderingProductPrice', array($product)); ?>
-							<div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="product-price-container">
+							<div  class="product-price-container">
 								<?php if($product->show_price && $product->show_special_price):?>
 
 									<?php if($product->pricing->base_price != $product->pricing->price):?>

@@ -48,12 +48,14 @@ class ProductSourceJoomla {
     }
 
     function getProductIdsByCategory( $module_params ){
+
         $params = $module_params ;
         $cat_ids = $params->get('catids','');
         $include_subcats = $params->get('include_subcategories',0); // do not include subcategories by default
         $include_subcat_level = $params->get('include_subcat_level',0);
         $show_feature_only = $params->get('show_feature_only',0);
         $product_ids = array();
+
         if(empty($cat_ids)){
             return $product_ids;
         }
@@ -76,14 +78,16 @@ class ProductSourceJoomla {
             if($show_feature_only){
                 $query->where( 'a.featured=1' );
             }
+
             if(!in_array('*', $cat_ids)) {
-                JArrayHelper::toInteger($cat_ids);
+                J2Store::platform()->toInteger($cat_ids);
                 //$cat_ids = '[[:<:]]'. implode('[[:>:]]|[[:<:]]', $cat_ids) .'[[:>:]]';
                 if(version_compare($db->getConnection()->server_info,'7.9.9','>')){
                     $cat_ids = '\\b'. implode('\\b|\\b', $cat_ids) .'\\b';
                 }else{
                     $cat_ids = '[[:<:]]'. implode('[[:>:]]|[[:<:]]', $cat_ids) .'[[:>:]]';
                 }
+
                 $type = ' ';
                 if ($this->checkTable () ) {
                     $categoryEquals = 'mc.catid ' . $type . ' REGEXP BINARY '. $db->q($cat_ids) ;
@@ -176,17 +180,20 @@ class ProductSourceJoomla {
             //default to the sql formatted date
             $nowDate = $db->quote( $date->toSql());
 
-            $query	->where('(a.publish_up = '.$nullDate.' OR a.publish_up <= '.$nowDate.')')
-                ->where('(a.publish_down = '.$nullDate.' OR a.publish_down >= '.$nowDate.')');
+            $query	->where('(a.publish_up = '.$nullDate.' OR a.publish_up <= '.$nowDate.' OR a.publish_up IS NULL)')
+                ->where('(a.publish_down = '.$nullDate.' OR a.publish_down >= '.$nowDate.' OR a.publish_down IS NULL)');
 
+//            $query->where('(a.publish_up = '.$nullDate.' OR a.publish_up <= '.$nowDate.')')
+//                ->where('(a.publish_down = '.$nullDate.' OR a.publish_down >= '.$nowDate.')');
+           // echo "<pre>";print_r($query);
             $user = JFactory::getUser();
             //access
             $groups = implode(',', $user->getAuthorisedViewLevels());
             $query->where('a.access IN (' . $groups . ')');
+            //echo "<pre>";print_r($params);exit;
             $this->_sfBuildSortQuery($query, $params);
             $db->setQuery( $query, 0, $limit );
             $product_ids = $db->loadColumn();
-
         }
 
         return $product_ids;

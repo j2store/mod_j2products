@@ -101,16 +101,14 @@ $document->addStyleSheet(JURI::root(true).'/media/j2store/css/font-awesome.min.c
 
 </script>
 <div class="jowl-module-product-slide-<?php echo $module_id;?>"> <!-- owl slider container -->
-	<div itemscope itemtype="https://schema.org/ItemList"
-		 id="<?php echo $slider_id;?>"
-		 class="j2store-product-module j2store-product-module-list owl-carousel">
+	<div id="<?php echo $slider_id;?>" class="j2store-product-module j2store-product-module-list owl-carousel">
 		<?php if( count($list) > 0 ):?>
 			<?php foreach ($list as $product_id => $product) : ?>
 				<?php  $rowcount = ((int) $counter % (int) $total_cols) + 1; ?>
-                <div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-                    <meta itemprop="position" content="<?php echo $counter+1;?>" />
+                <div>
+                    <meta  content="<?php echo $counter+1;?>" />
 				<!-- single product -->
-				<div itemprop="item" itemscope="" itemtype="http://schema.org/Product" class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product ">
+				<div class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product ">
 
 					<!-- product image if postion is top -->
 					<?php if ($product->image_position == 'top') {
@@ -118,23 +116,17 @@ $document->addStyleSheet(JURI::root(true).'/media/j2store/css/font-awesome.min.c
 					} ?>
 
 					<!-- product title -->
-					<?php if($product->show_title):
-                        $uri = JFactory::getURI();
-                        $current_page_url = $uri->toString();
-                        ?>
-						<h4 itemprop="name" class="product-title">
-							<?php if( $product->link_title ): ?>
-							<a itemprop="url"
-							   href="<?php echo $product->module_display_link; ?>"
-							   title="<?php echo $product->product_name; ?>" >
-								<?php endif; ?>
+                    <h2 class="product-title col-sm-12" >
+                        <?php if($product->show_title): ?>
+                        <a href="<?php echo $product->module_display_link; ?>"
+                           title="<?php echo $product->product_name ; ?>" >
+                            <?php endif; ?>
 
-								<?php echo $product->product_name; ?>
-								<?php if($product->link_title ): ?>
-							</a>
-						<?php endif; ?>
-						</h4>
-					<?php endif; ?>
+                            <?php echo $product->product_name; ?>
+                            <?php if($product->link_title): ?>
+                        </a>
+                    <?php endif; ?>
+                    </h2>
 					<?php if(isset($product->event->afterDisplayTitle)) : ?>
 						<?php echo $product->event->afterDisplayTitle; ?>
 					<?php endif;?>
@@ -198,7 +190,7 @@ $document->addStyleSheet(JURI::root(true).'/media/j2store/css/font-awesome.min.c
 
 								<meta itemprop="price" content="<?php echo $product->pricing->price; ?>" />
 								<meta itemprop="priceCurrency" content="<?php echo $j2currency->getCode(); ?>" />
-								<link itemprop="availability" href="http://schema.org/<?php echo $product->variant->availability ? 'InStock':'OutOfStock'; ?>" />
+								<link itemprop="availability" href="<?php echo $product->variant->availability ? 'InStock':'OutOfStock'; ?>" />
 							</div>
 							<?php //endif; ?>
 

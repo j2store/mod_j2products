@@ -22,7 +22,6 @@ class JFormFieldSubTemplate  extends JFormFieldList  {
         $moduleTemplatesPath = JPATH_SITE.DS.'modules'.DS.$moduleName.DS.'tmpl';
         $moduleTemplatesFolders = JFolder::folders($moduleTemplatesPath);
 
-
         $db = JFactory::getDBO();
         $query = "SELECT template FROM #__template_styles WHERE client_id = 0 AND home = 1";
         $db->setQuery($query);
