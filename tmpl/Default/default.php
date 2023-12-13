@@ -30,7 +30,7 @@ $total_count = count($list); $counter = 0;
 
 					<!-- product title -->
 					<?php if($product->show_title):
-                        $uri = JFactory::getURI();
+                        $uri = \Joomla\CMS\Uri\Uri::getInstance();
                         $current_page_url = $uri->toString();?>
 						<h4 itemprop="name" class="product-title">
 							<?php if( $product->link_title ): ?>
@@ -253,12 +253,9 @@ $total_count = count($list); $counter = 0;
 
 								<!-- Quick view -->
 								<?php if($product->show_quickview):?>
-									<?php if(strpos('?', $product->module_display_link)):?>
-										<?php $product->product_quickview_link = JRoute::_( $product->module_display_link.'&tmpl=component' );?>
-									<?php else:?>
-										<?php $product->product_quickview_link = JRoute::_( $product->module_display_link ).'?tmpl=component';?>
-									<?php endif;?>
-                                    <a data-fancybox data-type="ajax" data-src="<?php echo $product->product_quickview_link; ?>" href="javascript:;" class="j2store-product-quickview-modal btn btn-default"><i class="icon icon-eye"></i> <?php echo JText::_('J2STORE_PRODUCT_QUICKVIEW');?></a>
+                                    <a data-fancybox data-type="iframe" class="btn btn-default" data-src="<?php echo $platform->getProductUrl(array('task' => 'view', 'id' => $product->j2store_product_id,'tmpl' => 'component')); ?>" href="javascript:;">
+                                        <i class="fa fa-eye"></i> <?php echo JText::_('J2STORE_PRODUCT_QUICKVIEW');?>
+                                    </a>
 								<?php endif;?>
 							</div>
 						</div>

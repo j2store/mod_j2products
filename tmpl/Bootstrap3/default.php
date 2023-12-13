@@ -38,20 +38,24 @@ $actionURL = $active_link;
                     } ?>
 
                     <!-- product title -->
-                    <h2 class="product-title col-sm-12" >
-                        <?php if($product->show_title): ?>
-                        <a href="<?php echo $product->module_display_link; ?>"
-                           title="<?php echo $product->product_name ; ?>" >
+                    <h2 class="product-title col-sm-12">
+                        <?php if ($product->show_title) : ?>
+                            <?php if ($product->link_title) : ?>
+                                <a href="<?php echo $product->module_display_link; ?>" title="<?php echo $product->product_name; ?>">
                             <?php endif; ?>
 
                             <?php echo $product->product_name; ?>
-                            <?php if($product->link_title): ?>
-                        </a>
-                    <?php endif; ?>
+
+                            <?php if ($product->link_title) : ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </h2>
-                    <?php if(isset($product->event->afterDisplayTitle)) : ?>
+
+                    <?php if (isset($product->event->afterDisplayTitle)) : ?>
                         <?php echo $product->event->afterDisplayTitle; ?>
-                    <?php endif;?>
+                    <?php endif; ?>
+
                     <!-- end product title -->
 
                     <div class="product-cart-section">
@@ -249,19 +253,17 @@ $actionURL = $active_link;
                                         <input type="hidden" name="return" value="<?php echo base64_encode( JUri::getInstance()->toString() ); ?>" />
                                         <div class="j2store-notifications"></div>
                                         <?php if ($product->product_type == 'variable'|| $product->product_type == 'variablesubscriptionproduct'): ?>
-                                            <input type="hidden" name="variant_id" value="<?php echo $product->variant->j2store_variant_id; ?>" />
+                                            <a data-fancybox data-type="iframe" class="btn btn-default" data-src="<?php echo $platform->getProductUrl(array('task' => 'view', 'id' => $product->j2store_product_id,'tmpl' => 'component')); ?>" href="javascript:;">
+                                                <i class="fa fa-eye"></i> <?php echo JText::_('J2STORE_PRODUCT_QUICKVIEW');?>
+                                            </a>                                            <input type="hidden" name="variant_id" value="<?php echo $product->variant->j2store_variant_id; ?>" />
                                         <?php endif ?>
                                     </form>
                                 <?php endif;?>
-
                                 <!-- Quick view -->
                                 <?php if($product->show_quickview):?>
-                                    <?php if(strpos('?', $product->module_display_link)):?>
-                                        <?php $product->product_quickview_link = JRoute::_( $product->module_display_link.'&tmpl=component' );?>
-                                    <?php else:?>
-                                        <?php $product->product_quickview_link = JRoute::_( $product->module_display_link ).'?tmpl=component';?>
-                                    <?php endif;?>
-                                    <a data-fancybox data-type="ajax" data-src="<?php echo $product->product_quickview_link; ?>" href="javascript:;" class="j2store-product-quickview-modal btn btn-default"><i class="icon icon-eye"></i> <?php echo JText::_('J2STORE_PRODUCT_QUICKVIEW');?></a>
+                                    <a data-fancybox data-type="iframe" class="btn btn-default" data-src="<?php echo $platform->getProductUrl(array('task' => 'view', 'id' => $product->j2store_product_id,'tmpl' => 'component')); ?>" href="javascript:;">
+                                        <i class="fa fa-eye"></i> <?php echo JText::_('J2STORE_PRODUCT_QUICKVIEW');?>
+                                    </a>
                                 <?php endif;?>
                             </div>
                         </div>

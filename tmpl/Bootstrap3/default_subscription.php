@@ -64,7 +64,8 @@ switch ($subscription_period_units){
         break;
 }
 $plugin = JPluginHelper::getPlugin('j2store', 'app_subscriptionproduct');
-$subscription_params = new JRegistry($plugin->params);
+$platform=J2Store::platform();
+$subscription_params = $platform->getRegistry($plugin->params);
 $showDuration = $subscription_params->get('show_duration', 1);
 if($showDuration){
     ?>

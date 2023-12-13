@@ -28,7 +28,7 @@ $platform = J2Store::platform();
 		<?php endif;?>
 		<img  alt="<?php echo $product->product_name ;?> "
 		class="j2store-img-responsive j2store-product-image-<?php echo $product->j2store_product_id; ?>"  
-		src="<?php echo $image_root_path.$image_path;?>"
+		src="<?php echo $image_file_path;?>"
 		width="<?php echo $product->image_size_width ;?>"
 		height="<?php echo $product->image_size_height ;?>"  />
 
