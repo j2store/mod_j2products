@@ -159,7 +159,7 @@ $product_helper = J2Store::product();
 
         <?php if ($option['type'] == 'textarea') { ?>
          <!-- textarea -->
-	<div id="j2option-<?php echo $option['productoption_id']; ?>"
+	<div id="option-<?php echo $option['productoption_id']; ?>"
 		class="option">
           <?php if ($option['required']) { ?>
           <span class="required">*</span>

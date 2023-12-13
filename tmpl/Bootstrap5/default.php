@@ -253,7 +253,7 @@ $actionURL = $active_link;
                                         <input type="hidden" name="return" value="<?php echo base64_encode( JUri::getInstance()->toString() ); ?>" />
                                         <div class="j2store-notifications"></div>
                                         <?php if ($product->product_type == 'variable'|| $product->product_type == 'variablesubscriptionproduct'): ?>
-                                            <input type="hidden" name="variant_id" value="<?php echo $product->variant->j2store_variant_id; ?>" />
+                                         <input type="hidden" name="variant_id" value="<?php echo $product->variant->j2store_variant_id; ?>" />
                                         <?php endif ?>
                                     </form>
                                 <?php endif;?>
