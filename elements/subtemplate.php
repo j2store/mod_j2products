@@ -51,7 +51,7 @@ class JFormFieldSubTemplate  extends JFormFieldList  {
             $options[] = JHTML::_('select.option', $folder, $folder);
         }
 
-        array_unshift($options, JHTML::_('select.option', 'Default', '-- '.JText::_('MOD_J2PRODUCTS_USE_DEFAULT').' --'));
+        array_unshift($options, JHTML::_('select.option', 'Bootstrap5', '-- '.JText::_('MOD_J2PRODUCTS_USE_DEFAULT').' --'));
 
         $fieldName = $this->name;
         return JHTML::_('select.genericlist', $options, $fieldName, 'class="inputbox"', 'value', 'text', $this->value, $this->name);
