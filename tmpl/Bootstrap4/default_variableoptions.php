@@ -59,7 +59,7 @@ $options = $product->options;
           	 		<?php echo $product->j2store_product_id?>,
           	 		'#j2option-<?php echo $option["productoption_id"]; ?>'
           	 );"
-            value="<?php echo $option_value['product_optionvalue_id']; ?>" id="j2option-value-<?php echo $option_value['product_optionvalue_id']; ?>"
+            value="<?php echo $option_value['product_optionvalue_id']; ?>" id="option-value-<?php echo $option_value['product_optionvalue_id']; ?>"
 		       <?php echo $option_value['product_optionvalue_attribs'];?>
             />
 
@@ -73,7 +73,7 @@ $options = $product->options;
 			 	<?php echo $option_value['product_optionvalue_attribs'];?>
 			 />
           <?php endif; ?>
-          <label for="j2option-value-<?php echo $option_value['product_optionvalue_id']; ?>"
+          <label for="option-value-<?php echo $option_value['product_optionvalue_id']; ?>"
           	<?php echo $option_value['product_optionvalue_attribs'];?> >
           <?php echo stripslashes(htmlspecialchars(JText::_($option_value['optionvalue_name']))); ?>
           </label>

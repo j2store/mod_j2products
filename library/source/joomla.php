@@ -264,7 +264,7 @@ class ProductSourceJoomla {
      * */
     function getTableData(){
 
-        $table = new JObject();
+        $table = new stdClass();
         $table->category_key_field 	= 'id';
         $table->category_name_field = 'title';
         $table->category_table_name = '#__categories';

@@ -57,7 +57,7 @@ class ModJ2ProductsHelper
         // include css files
         if ( count($css_files) > 0 ) {
             foreach ($css_files as $css_file) {
-                if (JFile::exists(JPATH_SITE.$css_file)) {
+                if (\Joomla\CMS\Filesystem\File::exists (JPATH_SITE.$css_file)) {
                     $document->addStyleSheet(rtrim(JURI::root(true),'/').'/'.trim($css_file,'/'));
                 }
             }
@@ -65,7 +65,7 @@ class ModJ2ProductsHelper
         // include js files
         if ( count($js_files) > 0 ) {
             foreach ($js_files as $js_file) {
-                if (JFile::exists(JPATH_SITE.$js_file)) {
+                if (\Joomla\CMS\Filesystem\File::exists (JPATH_SITE.$js_file)) {
                     $document->addScript(rtrim(JURI::root(true),'/').'/'.trim($js_file,'/'));
                 }
             }
@@ -467,7 +467,7 @@ class ModJ2ProductsHelper
                 //$product->module_display_link = JRoute::_('index.php?option=com_j2store&view=products&task=view&id='.$product->j2store_product_id.$itemid);//$product->product_link;
                 $product_tag_link = $params->get('product_source_type','category');
                 if($product_tag_link == 'product_tag'){
-                    $app = JFactory::getApplication();
+                    $app = J2Store::platform()->application();
                     $menus = $app->getMenu();
 
                     $db = JFactory::getDbo ();

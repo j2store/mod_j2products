@@ -18,6 +18,7 @@ if($product->image_position == 'top'){
 	$img_class = ' '.$J2gridCol.'-6 ';
 }
 ?>
+   <?php $platform = J2Store::platform();?>
 <?php if($product->show_image): ?>
 <div class="j2store-product-image  <?php echo $img_class; ?> ">
     <?php $image_file_path = $platform->getImagePath($image_path) ;?>
@@ -27,7 +28,7 @@ if($product->image_position == 'top'){
 		<?php endif;?>
 		<img  alt="<?php echo $product->product_name ;?>"
 		class="j2store-img-responsive j2store-product-image-<?php echo $product->j2store_product_id; ?>"  
-		src="<?php echo $image_root_path.$image_path;?>" width="120"
+		src="<?php echo $image_file_path;?>" width="120"
         />
 
 		<?php if($product->module_display_link): ?>
